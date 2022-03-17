@@ -32,6 +32,8 @@ import org.mockito.listeners.InvocationListener
 import org.mockito.mock.SerializableMode
 import org.mockito.stubbing.Answer
 import kotlin.DeprecationLevel.ERROR
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /**
@@ -50,6 +52,7 @@ import kotlin.reflect.KClass
  * @param outerInstance Makes it possible to mock non-static inner classes in conjunction with [useConstructor].
  * @param lenient Lenient mocks bypass "strict stubbing" validation.
  */
+@OptIn(ExperimentalContracts::class)
 inline fun <reified T : Any> mock(
     extraInterfaces: Array<out KClass<out Any>>? = null,
     name: String? = null,
@@ -64,6 +67,7 @@ inline fun <reified T : Any> mock(
     @Incubating outerInstance: Any? = null,
     @Incubating lenient: Boolean = false
 ): T {
+    contract { callsInPlace(stubbing) }
     return Mockito.mock(
           T::class.java,
           withSettings(
@@ -99,6 +103,7 @@ inline fun <reified T : Any> mock(
  * @param outerInstance Makes it possible to mock non-static inner classes in conjunction with [useConstructor].
  * @param lenient Lenient mocks bypass "strict stubbing" validation.
  */
+@OptIn(ExperimentalContracts::class)
 inline fun <reified T : Any> mock(
     extraInterfaces: Array<out KClass<out Any>>? = null,
     name: String? = null,
@@ -114,6 +119,7 @@ inline fun <reified T : Any> mock(
     @Incubating lenient: Boolean = false,
     stubbing: KStubbing<T>.(T) -> Unit
 ): T {
+    contract { callsInPlace(stubbing) }
     return Mockito.mock(
           T::class.java,
           withSettings(
